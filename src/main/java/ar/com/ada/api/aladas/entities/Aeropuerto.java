@@ -23,6 +23,7 @@ public class Aeropuerto {
     @Column(name = "codigo_iata")
     private String codigoIATA;
 
+    
     public Integer getAeropuertoId() {
         return aeropuertoId;
     }
