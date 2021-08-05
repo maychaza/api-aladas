@@ -43,14 +43,14 @@ public class Pais {
         }
 
         public static TipoDocuEnum parse(Integer id) {
-            TipoDocuEnum status = null; // Default
+            TipoDocuEnum status = null; // se declara una variable y se deja nulo x Default
             for (TipoDocuEnum item : TipoDocuEnum.values()) {
                 if (item.getValue().equals(id)) {
-                    status = item;
-                    break;
+                    status = item;  // si lo encuentra lo guarda
+                    break;  // hace un break y sale
                 }
             }
-            return status;
+            return status;  // nos da el retorno
         }
     }
 }
