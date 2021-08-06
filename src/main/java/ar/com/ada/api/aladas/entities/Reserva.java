@@ -32,6 +32,20 @@ public class Reserva {
     @Column(name = "fecha_vencimiento")
     private Date fechaVencimiento;
 
+    @OneToOne(mappedBy = "reserva", cascade = CascadeType.ALL, fetch = FetchType.EAGER) //1 reserva 1 pasaje (1 solo item)
+    private Pasaje pasaje; // en linea 19, nombre del atributo que hace referencia a la tabla. 
+
+
+
+    public Pasaje getPasaje() {
+        return pasaje;
+    }
+
+    public void setPasaje(Pasaje pasaje) {
+        this.pasaje = pasaje;
+        pasaje.setReserva(this);
+    }
+
     public Vuelo getVuelo() {
         return vuelo;
     }
@@ -109,4 +123,15 @@ public class Reserva {
         }
     }
 
+    /*alternativa a la relacion bidireccional existente en el setPasaje
+
+    public void asociarPasaje(Pasaje pasaje){
+
+        this.setPasaje(pasaje);
+        pasaje.setReserva(this);
+    }
+    
+    */
+    
+    
 }
