@@ -11,6 +11,10 @@ public class Staff extends Persona{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer staffId;
 
+    @OneToOne(mappedBy = "staff", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Usuario usuario;
+
+
     public Integer getStaffId() {
         return staffId;
     }
@@ -18,6 +22,17 @@ public class Staff extends Persona{
     public void setStaffId(Integer staffId) {
         this.staffId = staffId;
     }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;  // staff señala a usuario
+        usuario.setStaff(this);  // usuario apunta a staff
+    }
+
+    
     
     
 }
