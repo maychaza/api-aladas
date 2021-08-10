@@ -10,12 +10,12 @@ import ar.com.ada.api.aladas.repos.AeropuertoRepository;
 
 @Service
 public class AeropuertoService {
-    
-    @Autowired 
+
+    @Autowired
     AeropuertoRepository repo;
 
-    public void crear(Integer aeropuertoId, String nombre, String codigoIATA){
-        
+    public void crear(Integer aeropuertoId, String nombre, String codigoIATA) {
+
         Aeropuerto aeropuerto = new Aeropuerto();
         aeropuerto.setAeropuertoId(aeropuertoId);
         aeropuerto.setNombre(nombre);
@@ -24,12 +24,31 @@ public class AeropuertoService {
         repo.save(aeropuerto);
     }
 
-    public List<Aeropuerto> obtenerTodos(){
-    
+    public List<Aeropuerto> obtenerTodos() {
+
         return repo.findAll();
     }
 
-    public Aeropuerto buscarPorCodigo (String codigoIATA){
-       return repo.findByCodigoIATA(codigoIATA);
+    public Aeropuerto buscarPorCodigo(String codigoIATA) {
+        return repo.findByCodigoIATA(codigoIATA);
+    }
+
+    public boolean validarCodigoIATA(Aeropuerto aeropuerto) {
+
+        if (aeropuerto.getCodigoIATA().length() != 3)
+            return false;
+
+        String codigoIATA = aeropuerto.getCodigoIATA();
+
+        for (int i = 0; i < codigoIATA.length(); i++) {
+            char c = codigoIATA.charAt(i);
+
+            if (!(c >= 'A' && c <= 'Z'))
+                return false;
+
+        }
+
+        return true;
+
     }
 }
