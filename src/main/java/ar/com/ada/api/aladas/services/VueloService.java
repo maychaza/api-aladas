@@ -2,8 +2,11 @@ package ar.com.ada.api.aladas.services;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import ar.com.ada.api.aladas.entities.Aeropuerto;
@@ -82,12 +85,39 @@ public class VueloService {
         return vuelo.getAeropuertoDestino().intValue() != vuelo.getAeropuertoOrigen().intValue();  //lo mismo que el if
     }
 
+    /* metodo para que un aerop inexistente de un mensaje de error especifico
+    
+        public boolean validarAeropuertoInexistente(Vuelo vuelo){
+        if (vuelo.getAeropuertoDestino() == null){
+            return false;
+        }
+        
+        if(vuelo.getAeropuertoDestino() > 0)
+            return true;
+        
+        
+        return false;    
+    }*/
+
 
 
 
     public enum ValidacionVueloDataEnum {
         OK, ERROR_PRECIO, ERROR_AEROPUERTO_ORIGEN, ERROR_AEROPUERTO_DESTINO, ERROR_FECHA,
-        ERROR_MONEDA, ERROR_CAPACIDAD_MINIMA, ERROR_CAPACIDAD_MAXIMA, ERROR_AEROPUERTOS_IGUALES, ERROR_GENERAL
+        ERROR_MONEDA, ERROR_CAPACIDAD_MINIMA, ERROR_CAPACIDAD_MAXIMA, ERROR_AEROPUERTOS_IGUALES, ERROR_GENERAL, AEROPUERTO_INEXISTENTE
+    }
+
+    public Vuelo buscarPorId (Integer id){
+        // se crea en el repo
+        return repo.findByVueloId(id);
+    }
+
+    public void actualizar(Vuelo vuelo) {
+        repo.save(vuelo);
+    }
+
+    public List<Vuelo> traerVuelosAbiertos() {
+        return repo.findByEstadoVueloId(EstadoVueloEnum.ABIERTO.getValue());
     }
     
 }
