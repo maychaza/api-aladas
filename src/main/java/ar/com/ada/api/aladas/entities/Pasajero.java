@@ -12,7 +12,7 @@ public class Pasajero extends Persona {
     @Id
     @Column(name = "pasajero_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer pasajeroID;
+    private Integer pasajeroId;
 
     @OneToMany(mappedBy = "pasajero", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reserva> reservas = new ArrayList<>();
@@ -20,12 +20,12 @@ public class Pasajero extends Persona {
     @OneToOne(mappedBy = "pasajero", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Usuario usuario;
 
-    public Integer getPasajeroID() {
-        return pasajeroID;
+    public Integer getPasajeroId() {
+        return pasajeroId;
     }
 
-    public void setPasajeroID(Integer pasajeroID) {
-        this.pasajeroID = pasajeroID;
+    public void setPasajeroId(Integer pasajeroId) {
+        this.pasajeroId = pasajeroId;
     }
 
     public void agregarReserva(Reserva reserva) { // relacion bidireccional

@@ -2,17 +2,19 @@ package ar.com.ada.api.aladas.entities;
 
 import java.util.Date;
 
-import javax.annotation.Generated;
 import javax.persistence.*;
+
 import org.hibernate.annotations.NaturalId;
+
+import net.bytebuddy.asm.Advice.Return;
 
 @Entity
 @Table(name = "usuario")
 public class Usuario {
 
     @Id
-    @Column(name = "usuario_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "usuario_id")
     private Integer usuarioId;
 
     @NaturalId
@@ -26,7 +28,7 @@ public class Usuario {
     private Date fechaLogin;
 
     @Column(name = "tipo_usuario_id")
-    private Integer tipoUsuarioId;
+    private Integer tipoUsuario;
 
     @OneToOne
     @JoinColumn(name = "staff_id", referencedColumnName = "staff_id")
@@ -35,8 +37,6 @@ public class Usuario {
     @OneToOne
     @JoinColumn(name = "pasajero_id", referencedColumnName = "pasajero_id")
     private Pasajero pasajero;
-
-    
 
     public Integer getUsuarioId() {
         return usuarioId;
@@ -78,12 +78,12 @@ public class Usuario {
         this.fechaLogin = fechaLogin;
     }
 
-    public TipoUsuarioEnum getTipoUsuarioId() {
-        return TipoUsuarioEnum.parse(this.tipoUsuarioId);
+    public TipoUsuarioEnum getTipoUsuario() {
+        return TipoUsuarioEnum.parse(this.tipoUsuario);
     }
 
-    public void setTipoUsuarioId(TipoUsuarioEnum tipoUsuarioId) {
-        this.tipoUsuarioId = tipoUsuarioId.getValue();
+    public void setTipoUsuario(TipoUsuarioEnum tipoUsuario) {
+        this.tipoUsuario = tipoUsuario.getValue();
     }
 
     public Staff getStaff() {
@@ -100,8 +100,22 @@ public class Usuario {
 
     public void setPasajero(Pasajero pasajero) {
         this.pasajero = pasajero;
+
     }
-    
+
+    public Integer obtenerEntityId() {
+        // TODO, segun el tipo de usuario, devolver el pasajeroId o staffId o nada!
+        switch (this.getTipoUsuario()) {
+            case PASAJERO:
+                return this.getPasajero().getPasajeroId();
+            case STAFF:
+                return this.getStaff().getStaffId();
+            default:
+                break;
+        }
+        return null;
+    }
+
     public enum TipoUsuarioEnum {
         STAFF(1), PASAJERO(2);
 
@@ -127,4 +141,5 @@ public class Usuario {
             return status;
         }
     }
+
 }
