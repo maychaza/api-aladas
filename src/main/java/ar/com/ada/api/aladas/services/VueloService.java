@@ -82,7 +82,7 @@ public class VueloService {
         else 
             return false;*/
           
-        return vuelo.getAeropuertoDestino().intValue() != vuelo.getAeropuertoOrigen().intValue();  //lo mismo que el if
+        return vuelo.getAeropuertoDestino().intValue() != vuelo.getAeropuertoOrigen().intValue();  //lo mismo que el if, el intvalue compara los objetos Integer
     }
 
     /* metodo para que un aerop inexistente de un mensaje de error especifico
