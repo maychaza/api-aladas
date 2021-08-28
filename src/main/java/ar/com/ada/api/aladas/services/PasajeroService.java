@@ -16,5 +16,9 @@ public class PasajeroService {
         repo.save(pasajero);
     }
 
+    public Pasajero buscarPorId(Integer id){
+       return repo.findByPasajeroId(id);  // se declara en el repo para que no de un Optional
+    }
+
     
 }
