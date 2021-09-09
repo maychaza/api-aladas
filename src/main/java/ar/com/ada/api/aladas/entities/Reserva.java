@@ -123,7 +123,7 @@ public class Reserva {
         }
     }
 
-    /*alternativa a la relacion bidireccional existente en el setPasaje
+    //alternativa a la relacion bidireccional existente en el setPasaje
 
     public void asociarPasaje(Pasaje pasaje){
 
@@ -131,7 +131,7 @@ public class Reserva {
         pasaje.setReserva(this);
     }
     
-    */
+    
     
     
 }

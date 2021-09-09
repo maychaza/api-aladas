@@ -51,5 +51,9 @@ public class ReservaService {
         
         return reserva.getReservaId();
     }
+
+    public Reserva buscarPorId(Integer id){
+        return repo.findByReservaId(id);  // se declara en el repo para que no de un Optional
+     }
     
 }
