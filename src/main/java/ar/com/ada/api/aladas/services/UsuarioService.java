@@ -17,6 +17,7 @@ import ar.com.ada.api.aladas.entities.Pais.TipoDocuEnum;
 import ar.com.ada.api.aladas.entities.Usuario.TipoUsuarioEnum;
 import ar.com.ada.api.aladas.repos.UsuarioRepository;
 import ar.com.ada.api.aladas.security.Crypto;
+import ar.com.ada.api.aladas.sistema.comm.EmailService;
 
 @Service
 public class UsuarioService {
@@ -29,6 +30,9 @@ public class UsuarioService {
 
   @Autowired
   StaffService staffService;
+
+  @Autowired
+  EmailService emailService;
 
   public Usuario buscarPorUsername(String username) {
     return usuarioRepository.findByUsername(username);
@@ -81,6 +85,8 @@ public class UsuarioService {
       staffService.crearStaff(staff);
     }
 
+    emailService.SendEmail(usuario.getEmail(), "Registración Exitosa", "Bienvenidx, usted ha sido registradx");
+    // se puede poner en reserva, en emitir pasaje o en donde quiera
     return usuario;
   }
 

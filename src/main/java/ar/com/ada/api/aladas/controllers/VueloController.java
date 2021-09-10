@@ -2,6 +2,8 @@ package ar.com.ada.api.aladas.controllers;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -104,8 +106,8 @@ public class VueloController {
     }
 
     @GetMapping("/api/vuelos/abiertos")
-    public ResponseEntity<List<Vuelo>> getVuelosAbiertos(){
-        return ResponseEntity.ok(service.traerVuelosAbiertos());
+    public List<Vuelo> getVuelosAbiertos(){
+        return service.traerVuelosAbiertos();
     }
 
     @GetMapping("api/vuelos/{id}")
