@@ -4,14 +4,22 @@ import java.util.List;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import ar.com.ada.api.aladas.entities.Usuario;
 import ar.com.ada.api.aladas.entities.Vuelo;
+import ar.com.ada.api.aladas.entities.Pais.TipoDocuEnum;
+import ar.com.ada.api.aladas.entities.Usuario.TipoUsuarioEnum;
 import ar.com.ada.api.aladas.entities.Vuelo.EstadoVueloEnum;
 import ar.com.ada.api.aladas.models.request.EstadoVueloRequest;
 import ar.com.ada.api.aladas.models.response.GenericResponse;
 import ar.com.ada.api.aladas.services.AeropuertoService;
+import ar.com.ada.api.aladas.services.UsuarioService;
 import ar.com.ada.api.aladas.services.VueloService;
 import ar.com.ada.api.aladas.services.VueloService.ValidacionVueloDataEnum;
 
@@ -23,6 +31,9 @@ public class VueloController {
 
     @Autowired
     AeropuertoService aeroService;
+
+    @Autowired
+    UsuarioService usuarioService;
 
     /*
      * otra forma de inyectar: version "pro"
@@ -93,7 +104,41 @@ public class VueloController {
     }
 
     @GetMapping("/api/vuelos/abiertos")
-    public List<Vuelo> getVuelosAbiertos(){
-        return service.traerVuelosAbiertos();
+    public ResponseEntity<List<Vuelo>> getVuelosAbiertos(){
+        return ResponseEntity.ok(service.traerVuelosAbiertos());
+    }
+
+    @GetMapping("api/vuelos/{id}")
+    public ResponseEntity<Vuelo> getVuelo(@PathVariable Integer id){
+        Vuelo vuelo = service.buscarPorId(id);
+        return ResponseEntity.ok(vuelo);
+    }
+
+    @GetMapping("api/vuelo/{id}/estados")     
+    public ResponseEntity<?> getEstadoVuelo(@PathVariable Integer id){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+
+        Usuario usuario = usuarioService.buscarPorUsername(username);
+
+        if (usuario.getTipoUsuario() == TipoUsuarioEnum.STAFF){
+            Vuelo vuelo = service.buscarPorId(id);
+            return ResponseEntity.ok(vuelo.getEstadoVueloId());
+
+        } else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            // return ResponseEntity.status(HttpStatus.NOT_FOUND).build();   es mejor para despistar
+        }
+    }
+
+    @GetMapping("api/vuelo/{id}/estadosV2")
+    @PreAuthorize("hasAuthority('CLAIM_userType_STAFF')")  // spring expression language
+    public ResponseEntity<?> getEstadoVueloV2(@PathVariable Integer id){
+
+            Vuelo vuelo = service.buscarPorId(id);
+            return ResponseEntity.ok(vuelo.getEstadoVueloId());
+
     }
 }
